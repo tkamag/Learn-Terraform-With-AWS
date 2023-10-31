@@ -1,1 +1,1 @@
-# tkamag-Learn-Terraform-With-AWS
+# Learn-Terraform-With-AWS
