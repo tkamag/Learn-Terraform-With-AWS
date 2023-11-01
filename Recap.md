@@ -1,9 +1,9 @@
-# AWS Provider
+# A.1 AWS Provider
 Use the **Amazon Web Services (AWS)** [provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs) to **interact with the many resources supported by AWS**. You must configure the provider with the proper credentials before you can use it.
 
 There are currently 1270 resources and 520 data sources available in the provider.
 
-### Example Usage
+### A.1.1 Example Usage
 Terraform 0.13 and later:
 
 ````sh
@@ -26,7 +26,7 @@ resource "aws_vpc" "example" {
   cidr_block = "10.0.0.0/16"
 }
 ````
-### Authentication and Configuration
+### A.1.2 Authentication and Configuration
 Configuration for the AWS Provider can be derived from several sources, which are applied in the following order:
 
 1. Parameters in the provider configuration
@@ -46,7 +46,7 @@ The AWS Provider supports assuming an IAM role using [web identity federation an
 When using a named profile, the AWS Provider also supports [sourcing credentials from an external process](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sourcing-external.html). 
 -->
 
-### Provider Configuration
+### A.1.3 Provider Configuration
 
 > **Warning**:
 
@@ -62,7 +62,7 @@ provider "aws" {
   secret_key = "my-secret-key"
 }
 ````
-### Environment Variables
+### A.1.4 Environment Variables
 Credentials can be provided by using the ``AWS_ACCESS_KEY_ID``, ``AWS_SECRET_ACCESS_KEY``, and optionally ``AWS_SESSION_TOKEN`` environment variables. The region can be set using the ``AWS_REGION`` or ``AWS_DEFAULT_REGION`` environment variables.
 
 For example:
@@ -74,7 +74,7 @@ provider "aws" {}
 % terraform plan
 ````
 
-### Shared Configuration and Credentials Files
+### A.1.5 Shared Configuration and Credentials Files
 The AWS Provider can source credentials and other settings from the shared configuration and credentials files. By default, these files are located at:
 * ``$HOME/.aws/config`` and ``$HOME/.aws/credentials`` on Linux and macOS, and
   
@@ -93,12 +93,12 @@ provider "aws" {
 }
 ````
 
-### Container Credentials
+### A.1.6 Container Credentials
 If you're running Terraform on CodeBuild or ECS and have configured an [IAM Task Role](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html), Terraform can use the container's Task Role. This support is based on the underlying ``AWS_CONTAINER_CREDENTIALS_RELATIVE_URI`` and ``AWS_CONTAINER_CREDENTIALS_FULL_URI`` environment variables being automatically set by those services or manually for advanced usage.
 
 If you're running Terraform on EKS and have configured [IAM Roles for Service Accounts (IRSA)](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html), Terraform can use the pod's role. This support is based on the underlying ``AWS_ROLE_ARN`` and ``AWS_WEB_IDENTITY_TOKEN_FILE`` environment variables being automatically set by Kubernetes or manually for advanced usage.
 
-### AWS Configuration Reference
+### A.1.7 AWS Configuration Reference
 [AWS Configuration Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#aws-configuration-reference)
 
 [Assume Role Configuration Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#assume-role-configuration-reference)
@@ -107,20 +107,20 @@ If you're running Terraform on EKS and have configured [IAM Roles for Service Ac
 
 [Argument Reference](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#argument-reference)
 
-# What is Infrastructure as Code with Terraform?
+# B. What is Infrastructure as Code with Terraform?
 Infrastructure as Code (IaC) tools allow you to manage infrastructure with configuration files rather than through a graphical user interface. IaC allows you to build, change, and manage your infrastructure in a safe, consistent, and repeatable way by defining resource configurations that you can version, reuse, and share.
 
 [https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/infrastructure-as-code)
 
-# Install terraform
+# C. Install terraform
 [Install terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 
-# Build infrastructure
+# D. Build infrastructure
 With Terraform installed, you are ready to create your first infrastructure.
 
 In this tutorial, you will provision an EC2 instance on Amazon Web Services (AWS). EC2 instances are virtual machines running on AWS, and a common component of many infrastructure projects.
 
-### Prerequisites
+### D.1 Prerequisites
 To follow this tutorial you will need:
 
 * The [Terraform CLI](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) (1.2.0+) installed.
@@ -136,7 +136,7 @@ export AWS_ACCESS_KEY_ID=
 ````sh
 export AWS_SECRET_ACCESS_KEY=
 ````
-### Write configuration
+### D.2 Write configuration
 The set of files used to describe infrastructure in Terraform is known as a **Terraform configuration**. You will write your first configuration to define a single AWS EC2 instance.
 
 > **Each Terraform configuration must be in its own working directory**. 
@@ -182,7 +182,7 @@ resource "aws_instance" "app_server" {
 
 ````
 
-### Terraform Block
+### D.3 Terraform Block
 The ``terraform {}`` block **contains Terraform settings, including the required providers Terraform will use to provision your infrastructure**. For each provider: 
 * The ``source`` attribute defines an optional hostname, a namespace, and the provider type. 
 > Terraform installs providers from the Terraform Registry by default. 
@@ -196,13 +196,13 @@ In this example configuration, the aws provider's source is defined as ``hashico
 
 To learn more, reference the [provider source documentation](https://developer.hashicorp.com/terraform/language/providers/requirements).
 
-### Providers
+### D.4 Providers
 The provider block configures the specified provider, in this case aws. 
 > **A provider is a plugin that Terraform uses to create and manage your resources**.
 
 You can use multiple provider blocks in your Terraform configuration to manage resources from different providers. You can even use different providers together. For example, you could pass the IP address of your AWS EC2 instance to a monitoring resource from DataDog.
 
-### Resources
+### D.5 Resources
 Use resource blocks **to define components of your infrastructure**. 
 > A **resource might be a physical or virtual component** such as an EC2 instance, or **it can be a logical resource** such as a Heroku application.
 
@@ -214,7 +214,7 @@ The prefix of the type maps to the name of the provider. In the example configur
 
 Resource blocks contain arguments which you use to configure the resource. Arguments can include things like **machine sizes**, **disk image names**, or **VPC IDs**. Our [providers reference](https://developer.hashicorp.com/terraform/language/providers) lists the required and optional arguments for each resource. For your EC2 instance, the example configuration sets the AMI ID to an Ubuntu image, and the instance type to t2.micro, which qualifies for AWS' free tier. It also sets a tag to give the instance a name.
 
-### Initialize the directory
+### D.6 Initialize the directory
 When you create a new configuration — or check out an existing configuration from version control — **you need to initialize the directory** with ``terraform init``.
 
 > Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the aws provider.
@@ -267,7 +267,7 @@ Validate your configuration. The example configuration provided above is valid, 
 Success! The configuration is valid.
 ````
 
-### Create infrastructure
+### D.7 Create infrastructure
 Apply the configuration now with the terraform apply command. Terraform will print output similar to what is shown below. We have truncated some of the output to save space.
 ````sh
  terraform apply
@@ -315,7 +315,7 @@ aws_instance.app_server: Creation complete after 36s [id=i-01e03375ba238b384]
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 ````
 
-### Inspect state
+### D.8 Inspect state
 When you applied your configuration, Terraform wrote data into a file called ``terraform.tfstate``.
 > **Terraform stores the IDs and properties of the resources it manages in this file, so that it can update or destroy those resources going forward**.
 
@@ -393,14 +393,14 @@ resource "aws_instance" "app_server" {
 }
 ````
 
-### Manually Managing State
+### D.9 Manually Managing State
 Terraform has a built-in command called ``terraform state`` `**for advanced state management**. Use the ``list`` subcommand **to list of the resources in your project's state**.
 ````sh
  terraform state list
 aws_instance.app_server
 ````
 
-### Troubleshooting
+### D.10 Troubleshooting
 If ``terraform validate`` was successful and your apply still failed, you may be encountering one of these common errors.
 
 If **you use a region** other than ``us-west-2``, you will also need to change your ami, since AMI IDs are region-specific. Choose an AMI ID specific to your region by following [these instructions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html#finding-quick-start-ami), and modify main.tf with this ID. Then re-run terraform apply.
@@ -419,3 +419,54 @@ If **you do not have a default VPC in your AWS account in the correct region**, 
 Save the changes to ``main.tf``, and re-run ``terraform apply``.
 
 Remember to add these lines to your configuration for later tutorials. For more information, [review this document](https://docs.aws.amazon.com/vpc/latest/userguide/working-with-vpcs.html) from AWS on working with VPCs.
+
+### D.11 Change infrastructure
+[Change infrastructure](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-change)
+
+### D.12 Destroy infrastructure
+You have now created and updated an EC2 instance on AWS with Terraform. In this tutorial, you will use Terraform to destroy this infrastructure.
+
+Once you no longer need infrastructure, you may want to destroy it to reduce your security exposure and costs. For example, you may remove a production environment from service, or manage short-lived environments like build or testing systems. In addition to building and modifying infrastructure, Terraform can destroy or recreate the infrastructure it manages.
+
+### D.13 Destroy
+The terraform destroy command terminates resources managed by your Terraform project. This command is the inverse of terraform apply in that it terminates all the resources specified in your Terraform state. It does not destroy resources running elsewhere that are not managed by the current Terraform project.
+
+Destroy the resources you created.
+````sh
+terraform destroy
+Terraform used the selected providers to generate the following execution plan.
+Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+# aws_instance.app_server will be destroyed
+  - resource "aws_instance" "app_server" {
+      - ami                          = "ami-08d70e59c07c61a3a" -> null
+      - arn                          = "arn:aws:ec2:us-west-2:561656980159:instance/i-0fd4a35969bd21710" -> null
+##...
+
+Plan: 0 to add, 0 to change, 1 to destroy.
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value:
+  ````
+
+  The - prefix indicates that the instance will be destroyed. As with apply, Terraform shows its execution plan and waits for approval before making any changes.
+
+Answer yes to execute this plan and destroy the infrastructure.
+
+  Enter a value: yes
+````sh
+aws_instance.app_server: Destroying... [id=i-0fd4a35969bd21710]
+aws_instance.app_server: Still destroying... [id=i-0fd4a35969bd21710, 10s elapsed]
+aws_instance.app_server: Still destroying... [id=i-0fd4a35969bd21710, 20s elapsed]
+aws_instance.app_server: Still destroying... [id=i-0fd4a35969bd21710, 30s elapsed]
+aws_instance.app_server: Destruction complete after 31s
+
+Destroy complete! Resources: 1 destroyed.
+````
+Just like with apply, Terraform determines the order to destroy your resources. In this case, Terraform identified a single instance with no other dependencies, so it destroyed the instance. In more complicated cases with multiple resources, Terraform will destroy them in a suitable order to respect dependencies.
