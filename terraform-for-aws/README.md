@@ -46,7 +46,7 @@ terraform.rc
 mkdir terraform-for-aws && 
 cd    terraform-for-aws
 ````
-![Alt text](./images/01.png)
+![Alt text](../images/01.png)
 
 ## A. Creating Resources and Terraform Fundamentals
 #### A.1 Create a VPC
