@@ -428,7 +428,7 @@ You have now created and updated an EC2 instance on AWS with Terraform. In this 
 
 Once you no longer need infrastructure, you may want to destroy it to reduce your security exposure and costs. For example, you may remove a production environment from service, or manage short-lived environments like build or testing systems. In addition to building and modifying infrastructure, Terraform can destroy or recreate the infrastructure it manages.
 
-### D.13 Destroy
+#### D.12.1 Destroy
 The terraform destroy command terminates resources managed by your Terraform project. This command is the inverse of terraform apply in that it terminates all the resources specified in your Terraform state. It does not destroy resources running elsewhere that are not managed by the current Terraform project.
 
 Destroy the resources you created.
@@ -470,3 +470,7 @@ aws_instance.app_server: Destruction complete after 31s
 Destroy complete! Resources: 1 destroyed.
 ````
 Just like with apply, Terraform determines the order to destroy your resources. In this case, Terraform identified a single instance with no other dependencies, so it destroyed the instance. In more complicated cases with multiple resources, Terraform will destroy them in a suitable order to respect dependencies.
+
+### D.13 Define input variables
+
+Examples so far have used **hard-coded values**. Terraform configurations can include variables to make your configuration more dynamic and flexible.
