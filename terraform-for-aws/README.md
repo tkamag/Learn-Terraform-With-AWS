@@ -118,12 +118,12 @@ Now we can apply those changes by running ``terraform apply``.
 * All scripts in the current folder
 * It give us the plan detail and all actions that will be perform.
 
-![Alt text](./images/03.PNG)
-![Alt text](./images/04.PNG)
+![Alt text](./images/03.png)
+![Alt text](./images/04.png)
 
 Finally our VPC is created
 
- ![Alt text](./images/05.PNG)
+ ![Alt text](./images/05.png)
 
  **Note**:
 
@@ -137,4 +137,4 @@ output "vpc_cidr" {
     value = "${aws_vpc.my_vpc.cidr_block}"
 }
 ````
- ![Alt text](./images/06.PNG)
+ ![Alt text](./images/06.png)
