@@ -49,4 +49,40 @@ cd    terraform-for-aws
 ![Alt text](../images/01.png)
 
 ## A. Creating Resources and Terraform Fundamentals
+Before crating some resources,  we need to define and configure providers in our ``main.tf`` file.
+
+````sh
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
+
+````
+
+Prior to terraform 0.12 you should use: 
+
+````sh
+# Configure the AWS Provider
+provider "aws" {
+  version = "~> 5.0"
+  region  = "us-east-1"
+}
+````
+
+After adding providers details, you have to initialize Terraform project by running ``terraform init`` 
+
+ ``terraform init``  will download providers plugins and will create a  ``.terraform`` folder in your workspace.
+
+ ![Alt text](../images/02.png)
+
 #### A.1 Create a VPC
+Before creating
