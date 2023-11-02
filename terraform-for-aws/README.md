@@ -46,7 +46,7 @@ terraform.rc
 mkdir terraform-for-aws && 
 cd    terraform-for-aws
 ````
-![Alt text](../images/01.png)
+![Alt text](./images/01.png)
 
 ## A. Creating Resources and Terraform Fundamentals
 Before crating some resources,  we need to define and configure providers in our ``providers.tf`` file.
@@ -84,7 +84,7 @@ After adding providers details, you have to initialize Terraform project by runn
 
  * ``terraform init`` are not run very often , but **each time it is run, it will download the version of the specified provider**.
 
- ![Alt text](../images/02.png)
+ ![Alt text](./images/02.png)
 
 #### A.1 Create a VPC
 For creating resource to our file.
@@ -118,12 +118,12 @@ Now we can apply those changes by running ``terraform apply``.
 * All scripts in the current folder
 * It give us the plan detail and all actions that will be perform.
 
-![Alt text](../images/03.PNG)
-![Alt text](../images/04.PNG)
+![Alt text](./images/03.PNG)
+![Alt text](./images/04.PNG)
 
 Finally our VPC is created
 
- ![Alt text](../images/05.PNG)
+ ![Alt text](./images/05.PNG)
 
  **Note**:
 
@@ -137,4 +137,4 @@ output "vpc_cidr" {
     value = "${aws_vpc.my_vpc.cidr_block}"
 }
 ````
- ![Alt text](../images/06.PNG)
+ ![Alt text](./images/06.PNG)
