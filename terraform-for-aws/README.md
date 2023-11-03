@@ -226,4 +226,4 @@ variable "vpc_cidr" {
 
 
 ![Alt text](images/11.png)
-![Alt text](images/12.png)
+![Alt text](images/13.png)
