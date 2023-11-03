@@ -138,3 +138,92 @@ output "vpc_cidr" {
 }
 ````
  ![Alt text](./images/06.png)
+
+ #### A.2 Terraform Local State file
+ All resources creates using Terraform script is maintain inside one JSON file format and called by default ``terraform.tfstate`` and the default location is your workspace.
+
+ When you hint ``terraform apply`` , **it compare the terraform script with the state file**. 
+ > Any difference between the files would allow terraform to add, update or destroy ressource in the state file**
+
+ > If you delete your state file, **whatever resource he's create previously,  he's  loose connexion to that**. the ressource remain into your account but Terraform will not have access or control to tht ressource.
+
+  #### A.3 Terraform Remote State file
+  When many developers are working together on the same state file, it's very difficult to use a local state file. 
+  * A good practice is to **use S3 as a remote state file location** and activate versioning on S3 bucket to keep previous version of the file.
+  * It's also a good practice **to enable encryption**
+ 
+  * [S3 Backend](https://developer.hashicorp.com/terraform/language/settings/backends/s3)
+
+  By adding this piece of code, the problem will be solve.
+````sh
+  terraform {
+  backend "s3" {
+    bucket = "mybucket"
+    key    = "path/to/my/key"
+    region = "us-east-1"
+  }
+}
+ ````
+
+**Note::**
+
+* After uploading your local state file to S3, you can delete the local file because terraform will not longer wse this local file, **it will only work with the remote file.
+
+![Alt text](images/08.png)
+
+> That new file can be share securely between many developers.
+
+
+
+#### A.4 Terraform Local State file
+If multiple developers applying concurrently, it can create **inconsistent state file**
+> **it's always important to make a lock when a developer is performing an operation on that** and block the remaining users until the current operation is completed.
+>
+
+For state locking and consistency, we use a ``dynamo_db`` table.
+* [DynamoDB State Locking](https://developer.hashicorp.com/terraform/language/settings/backends/s3#dynamodb-state-locking)
+
+* The table must have a partition key named **LockID** with type of String. If not configured, state locking will be disabled.
+
+````sh
+terraform {
+  backend "s3" {
+    bucket = "mybucket"
+    key    = "path/to/my/key"
+    region = "us-east-1"
+    dynamodb_table = "table_name"
+  }
+}
+
+````
+
+Common errors
+
+![](images/09.png)
+
+just run ``terraform init -migrate-state``
+![ ](images/09.png)
+
+#### A.5 Terraform Variables And tfvars
+In programmation, variables gives better maintainability and code reusability.
+1. First create a new file called variables.tf
+2. In terraform the name of the file don't matter, only the extensions of the file.
+3. Don't forget to segregate you code into multiple small script.
+
+**Note:**
+* [Variables and Outputs](https://developer.hashicorp.com/terraform/language/values)
+
+````==sh
+variable "vpc_cidr" {
+  default = "10.20.0.0/18"
+  description ="Choose  cidr for VPC"
+  type = "string"
+}
+````
+* Here we have define a variable ``vpc_cidr`` with his default value, type and description. This value can be overwrite at the compilation using ``-var ``
+
+* Now we need to change ``providers.tf`` a lite bit.
+
+
+![Alt text](images/11.png)
+![Alt text](images/12.png)
