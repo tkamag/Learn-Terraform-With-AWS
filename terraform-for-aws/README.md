@@ -227,3 +227,11 @@ variable "vpc_cidr" {
 
 ![Alt text](images/11.png)
 ![Alt text](images/13.png)
+
+**Note:**
+* You can use command line extension ``-auto-complete`` to avoid the prompt when using ``terraform apply``.
+* To pass variables when using ``terraform apply``, use the command line ``-var "vpc_cidr=10.30.0.0/16"``
+* When you have more than one variable, **keep those value inside a file** and pase the reference to that file using the comand line ``-var-file locatio_of_the_file``
+* Whatever the name of the file you use, it is mandatory to have ``.tfvars`` as a file's extension.
+
+![Alt text](images/14_b.png)
