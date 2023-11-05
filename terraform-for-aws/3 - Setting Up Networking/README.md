@@ -13,15 +13,15 @@ For High Availability we need multiple subnets spanning multiples availability z
 * Variable define in ``dev.tfvars`` file are variable that is use in command line and those variables overwrite the one define in different file.
 
 ````sh
-resource "aws_subnet" "public" {                            # Define resource with logical type and logical name
-    count ="${length(local.az_names)}"                      # az_names is the list of the names of different az in the 
-                                                            # region we work in.
-    vpc_id = "${aws_vpc.my_app.id}"                         # Retrieve the Id of each VPC created
-    cidr_block = cidrsubnet(var.vpc_cidr,8, count.index)    # Given a cidr_block, cidrsubnet will add 8 to a mask and 
-                                                            # return one by one.
-    availability_zone = "${local.az_names[count.index]}"    # count.index is to pick one by one element in a list starting at 0
+resource "aws_subnet" "public" {                          # Define resource with logical type and logical name
+    count ="${length(local.az_names)}"                    # az_names is the list of the names of different az in the 
+                                                          # region we work in.
+    vpc_id = "${aws_vpc.my_app.id}"                       # Retrieve the Id of each VPC created
+    cidr_block = cidrsubnet(var.vpc_cidr,8, count.index)  # Given a cidr_block, cidrsubnet will add 8 to a mask and 
+                                                          # return one by one.
+    availability_zone = "${local.az_names[count.index]}"  # count.index is to pick one by one element in a list starting at 0
     tags = {
-     Name = "PublicSubnet-${count.index +1}"                # Here we will have for tags PublicSubnet-1, PublicSubnet-2, etc...
+     Name = "PublicSubnet-${count.index +1}"              # Here we will have for tags PublicSubnet-1, PublicSubnet-2, etc...
    }
 }
 
