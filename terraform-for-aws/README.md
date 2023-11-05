@@ -235,3 +235,77 @@ variable "vpc_cidr" {
 * Whatever the name of the file you use, it is mandatory to have ``.tfvars`` as a file's extension.
 
 ![Alt text](images/14_b.png)
+
+### A.6 Terraform Workspaces
+Maintaining multiple environments is pretty handy. For developers we need too have Dev, Uat and Prod environments who have two different statements.
+
+Terraform by default maintain ine workspace and created when initializing our project.
+* Use ``terraform workspace list`` to list all workspaces
+  
+* Use ``terraform workspace new dev`` to create a new Dev workspace.
+  > **Terraform maintain separate state file four all environment**.
+
+* Use ``terraform workspace select dev`` to navigate between workspace.
+
+When creating these workspaces, 
+  > **Terraform will create as many folders in the bucket as environments you've decided to create**
+
+  ![Alt text](images/15.png)
+
+  Resource ``aws_vpc`` has a key value **Environment** which is **Dev**, we can change it to make our script much more dynamic. So instead of:
+  * ``Environment = "Dev"``, we'll have ``Environment = "${terraform.workspace}$``
+
+### A.7 Terraform Loops
+You can use loops for example when you want to create multiple same instance, the only thing you have to do is to mention the variable ``count`` inside your ressource.
+
+````sh
+resource "aws_vpc" "my_vpc" {
+  count             = 3
+  cidr_block        = "${var.vpc_cidr}"
+  instance_tenancy  = "default"
+
+  tags              = {
+    Name            = "JavaHomeVpc"
+    Environment     = "${terraform.workspace}"
+    Location        = "Paris - France"
+  }
+}
+````
+
+### A.7 Terraform Conditions
+In Terraform, we can create certains ressources conditionally i.e create a ressource in dev but not in production.
+
+For example: 
+
+We want to create 1 VPC in Prod and nothing in Dev. We can use this condition inside our vpc ressource:
+
+``count = "${terraform.workspace == "dev"? 0, 1}"``
+
+  ![Alt text](images/16.png)
+
+   ![Alt text](images/17.png)
+
+### A.8 Terraform Locals
+If we have an expression with is repeatedly use in the code, we can declare them as part of the **local variables** and refer them in the code. So in the future, if you want to change the value, you don't have to change to value in the code but only where it's has been declared.
+
+FOr this, let's create a separate file call ``locals.tf``
+````sh
+locals {
+  vpc_name = "${terraform.workspace == "dev"? "javahome-dev", "javahome-prod"}"
+}
+
+resource "aws_vpc" "my_vpc" {
+  count             = 3
+  cidr_block        = "${var.vpc_cidr}"
+  instance_tenancy  = "default"
+
+  tags              = {
+    Name            = "${local.vpc_name}"
+    Environment     = "${terraform.workspace}"
+    Location        = "Paris - France"
+  }
+}
+````
+**Note:** ``Local values`` are created by a ``locals block`` (plural), **but you reference them as attributes on an object named local (singular)**. Make sure to leave off the "s" when referencing a local value!
+
+## B. Setting Up Networking For Our Applications
