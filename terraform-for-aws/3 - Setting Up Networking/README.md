@@ -150,3 +150,9 @@ Use the argument define by:
 ![Alt text](../images/24.png)
 
 ![Alt text](../images/25.png)
+
+<figure>
+  <img src="../images/24.png" alt=".." title="Optional title" width="45%" height="70%"/>
+  <img src="../images/25.png" alt=".." title="Optional title" width="45%" height="70%"/>
+	<figcaption></figcaption>
+</figure>
