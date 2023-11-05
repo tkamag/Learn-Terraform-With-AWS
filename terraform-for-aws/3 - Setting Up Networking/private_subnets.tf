@@ -7,3 +7,35 @@ resource "aws_subnet" "private" {
     Name = "PrivateSubnet-${count.index + 1}"
   }
 }
+
+resource "aws_instance" "nat" {
+  ami               = var.nat_amis[var.region]
+  instance_type     = "t3.micro"
+  subnet_id         = local.pub_sub_ids[0]
+  source_dest_check = false
+  # associate_public_ip_address = true
+
+  tags = {
+    Name = "JavaHomeNat"
+  }
+}
+
+resource "aws_route_table" "privatert" {
+  vpc_id = aws_vpc.my_app.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "javaHomePrivateRT"
+  }
+}
+
+resource "aws_route_table_association" "private_rt_association" {
+  count          = length(slice(local.az_names, 0, 2))
+  subnet_id      = local.private_sub_ids[count.index] # aws_subnet.public.*.id: Return list of subnet Id's 
+  route_table_id = aws_route_table.privatert.id
+}
+

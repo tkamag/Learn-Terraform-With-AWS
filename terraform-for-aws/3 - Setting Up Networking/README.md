@@ -158,3 +158,11 @@ Use the argument define by:
 	<figcaption></figcaption>
 </figure> 
 -->
+## A.4 - 26 - Configure NAT Instance
+We want to configure internet access to private subnets, we are going to use ``NAT instance`` for that instead of ``NAT Gateway``. Wa already have two private subnets, we should: 
+* Create one route table for those two private subnets
+* Launch ``NAT instance`` in public subnet and configure internet access to private.
+
+* [Resource: aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
+
+![Alt text](../images/30.png)
