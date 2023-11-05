@@ -67,19 +67,49 @@ When this Terraform configuration with appropriate provider settings is initiali
 * [IGW - Resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway)
 * [IGW - Data sources](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/internet_gateway)
 
+````sh
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.my_app.id
+
+  tags = {
+    Name = "javaHomeIgw"
+  }
+}
+````
+
+![Alt text](../images/23.png)
+
 ### A.1.2 - Public subnet - Route Table (Associate route table to internet gateway)
 * [Route table - Data Source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_table)
 * [Routes table - Data Source](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route_tables)
 * [Routes table - Resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table)
 
-### A.1.3 - Public subnet - Route table aassociation
+````sh
+resource "aws_route_table" "prt" {
+  vpc_id = aws_vpc.my_app.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "javaHomePRT"
+  }
+}
+````
+
+![Alt text](../images/22.png)
+
+### A.1.3 - Public subnet - Route table association
 * [Route Association - Resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association)
 * [IGW - Data sources](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/internet_gateway)
 
 ![Alt text](../images/18.png)
 
 ## A.2 - Create Private Subnet
-
+Idea here is to create only two subnet, that's why we use the ``slice`` function to only retrieve the first two ``az_names``, index 0 and index 1.
+Without that we could have create as much private subnet than public subnet.
 ````sh
 resource "aws_subnet" "private" {
   count             = length(slice(local.az_names, 0, 2)) # slice function return a subset of a set
