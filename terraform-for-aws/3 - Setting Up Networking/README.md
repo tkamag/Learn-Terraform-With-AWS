@@ -107,3 +107,5 @@ to
 ````sh
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + length(local.az_names))
 ````
+
+![Alt text](../images/21.png)
