@@ -188,4 +188,4 @@ resource "aws_security_group" "nat_sg" { # nat_sg need to be associated to NAT i
   }
 }
 ````
-![Alt text](../images/31.png)
+![Alt text](../images/31_.png)
