@@ -14,6 +14,7 @@ resource "aws_instance" "nat" {
   subnet_id         = local.pub_sub_ids[0]
   source_dest_check = false
   # associate_public_ip_address = true
+  vpc_security_group_ids = ["${aws_security_group.nat_sg.id}"]
 
   tags = {
     Name = "JavaHomeNat"
@@ -39,3 +40,20 @@ resource "aws_route_table_association" "private_rt_association" {
   route_table_id = aws_route_table.privatert.id
 }
 
+
+resource "aws_security_group" "nat_sg" { # nat_sg need to be associated to NAT instance or NAT gateway
+  name        = "nat_sg"
+  description = "Allow traffics for Subnets"
+  vpc_id      = aws_vpc.my_app.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # Specify all port
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_tls"
+  }
+}

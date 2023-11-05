@@ -158,7 +158,7 @@ Use the argument define by:
 	<figcaption></figcaption>
 </figure> 
 -->
-## A.4 - 26 - Configure NAT Instance
+## A.4 - Configure NAT Instance
 We want to configure internet access to private subnets, we are going to use ``NAT instance`` for that instead of ``NAT Gateway``. Wa already have two private subnets, we should: 
 * Create one route table for those two private subnets
 * Launch ``NAT instance`` in public subnet and configure internet access to private.
@@ -166,3 +166,26 @@ We want to configure internet access to private subnets, we are going to use ``N
 * [Resource: aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
 
 ![Alt text](../images/30.png)
+
+## A.5 - Configure NAT Instance Security Group
+We have to secure ``NAT instances`` or ``NAT gateways`` using ``security groups``.
+
+````sh
+resource "aws_security_group" "nat_sg" { # nat_sg need to be associated to NAT instance or NAT gateway
+  name        = "nat_sg"
+  description = "Allow traffics for Subnets"
+  vpc_id      = aws_vpc.my_app.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # Specify all port
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_tls"
+  }
+}
+````
+![Alt text](../images/31.png)
