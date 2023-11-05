@@ -139,3 +139,14 @@ to
 ````
 
 ![Alt text](../images/21.png)
+
+## A.3 - Enable Subnet Settings For Auto Assigning Public IP
+For public subnet, we want to automatically assign public IP
+* [Resource: aws_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet)
+
+Use the argument define by:
+``map_public_ip_on_launch = true`` or ``map_public_ip_on_launch = "true"`` i.e in Terraform Boolean value can be declare without/with quote.
+
+![Alt text](../images/24.png)
+
+![Alt text](../images/25.png)

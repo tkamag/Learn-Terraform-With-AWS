@@ -4,10 +4,11 @@ locals {
 }
 
 resource "aws_subnet" "public" {
-  count             = length(local.az_names)
-  vpc_id            = aws_vpc.my_app.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index)
-  availability_zone = local.az_names[count.index]
+  count                   = length(local.az_names)
+  vpc_id                  = aws_vpc.my_app.id
+  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index)
+  availability_zone       = local.az_names[count.index]
+  map_public_ip_on_launch = true
   tags = {
     Name = "PublicSubnet-${count.index + 1}"
   }
@@ -39,3 +40,5 @@ resource "aws_route_table_association" "pub_sub_association" {
   subnet_id      = local.pub_sub_ids[count.index] # aws_subnet.public.*.id: Return list of subnet Id's 
   route_table_id = aws_route_table.prt.id
 }
+
+
