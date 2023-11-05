@@ -10,6 +10,13 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "web_ec2_count" {
+  description = "Choose number of ec2 for web"
+  type        = string
+  default     = "2"
+}
+
+
 variable "nat_amis" {
   type = map(string)
   default = {
@@ -18,9 +25,17 @@ variable "nat_amis" {
   }
 }
 
-variable "web_instance_type" {
-  description = "Choose instance type for your web"
-  type        = string
-  default     = "t2.micro"
+variable "web_amis" {
+  type = map(string)
+  default = {
+    us-east-1 = "ami-05c13eab67c5d8861"
+    us-east-2 = "ami-0e8a34246278c21e4"
+  }
 }
 
+variable "web_tags" {
+  type = map(string)
+  default = {
+    Name = "WebServer"
+  }
+}
