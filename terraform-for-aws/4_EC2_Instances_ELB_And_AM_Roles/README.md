@@ -635,3 +635,103 @@ Apply complete! Resources: 24 added, 0 changed, 0 destroyed.
 (base) ➜  4_EC2_Instances_ELB_And_AM_Roles git:(main) ✗
 
 ````
+
+## A.3 - Create S3 Bucket
+In this section we will create a new s3 bucket.
+
+* [Resource: aws_s3_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket.html)
+
+````sh
+...
+aws_route_table_association.pub_sub_association[3]: Creation complete after 1s [id=rtbassoc-0fafad588cdb53127]
+aws_route_table_association.pub_sub_association[1]: Creation complete after 1s [id=rtbassoc-082eb189666fbc897]
+aws_route_table_association.pub_sub_association[0]: Creation complete after 1s [id=rtbassoc-0f7a8f11b532447d5]
+aws_route_table_association.pub_sub_association[5]: Creation complete after 1s [id=rtbassoc-0344c7c229443cbe7]
+aws_route_table_association.pub_sub_association[2]: Creation complete after 1s [id=rtbassoc-0698e26e2db7d384a]
+aws_route_table_association.pub_sub_association[4]: Creation complete after 1s [id=rtbassoc-0545e968bd0e88e68]
+aws_s3_bucket.my_bucket: Creation complete after 19s [id=javahome-app-dev-tka]
+aws_instance.nat: Still creating... [10s elapsed]
+aws_instance.web[0]: Still creating... [10s elapsed]
+aws_instance.web[1]: Still creating... [10s elapsed]
+aws_instance.nat: Creation complete after 14s [id=i-08a8e94da2e833d52]
+aws_instance.web[1]: Still creating... [20s elapsed]
+aws_instance.web[0]: Still creating... [20s elapsed]
+aws_instance.web[1]: Still creating... [30s elapsed]
+aws_instance.web[0]: Still creating... [30s elapsed]
+aws_instance.web[0]: Creation complete after 33s [id=i-0e1a761dc8dbb876f]
+aws_instance.web[1]: Creation complete after 33s [id=i-08a84758c46ca000e]
+
+Apply complete! Resources: 25 added, 0 changed, 0 destroyed.
+````
+
+## A.4 - Attach IAM Role to EC2 and Terraform Template
+### A.4.1 - Create an IAM role
+We have create an s3 bucket. Now we want to create an IAM role for EC2 instances. Using IAM role, applications running on EC2 instances will get access to s3 for uploading object.
+
+First we need to create ``Assume Role`` then ``IAM Policy`` follow by creating ``IAM Role`` itself by linking those two.
+
+* [template_file](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file)
+* [Resource: aws_iam_role_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy)
+
+````sh
+.................
+Plan: 27 to add, 0 to change, 0 to destroy.
+aws_vpc.my_app: Creating...
+aws_s3_bucket.my_bucket: Creating...
+aws_iam_role.s3_ec2_role: Creating...
+aws_iam_role.s3_ec2_role: Creation complete after 1s [id=s3_ec2_role]
+aws_iam_role_policy.s3_ec2_policy: Creating...
+aws_iam_role_policy.s3_ec2_policy: Creation complete after 0s [id=s3_ec2_role:s3_ec2_policy]
+
+Apply complete! Resources: 27 added, 0 changed, 0 destroyed.
+(base) ➜  4_EC2_Instances_ELB_And_AM_Roles git:(main) ✗
+````
+
+![Alt text](../images/32.png)
+
+### A.4.2 - Attach the IAM role to an EC2 instance.
+For attaching IAM role to EC2 instance, we need to create an ``instance profile``.
+> An **IAM Profile** is effectively **the glue that links an IAM Role to an Amazon EC2 instance**. They can only take one role each (even though it shows as an array of Roles). f you want to play with the Instance Profile, you'll need to do it through the AWS CLI or API calls.
+
+* [Resource: aws_iam_instance_profile](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile)
+* [AWS IAM EC2 Instance Role using Terraform](https://devopslearning.medium.com/aws-iam-ec2-instance-role-using-terraform-fa2b21488536)
+* [Create an IAM instance profile for your Amazon EC2 instances](https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-iam-instance-profile.html)
+
+````sh
+.........................
+Plan: 1 to add, 2 to change, 0 to destroy.
+aws_iam_instance_profile.s3_ec2_profile: Creating...
+aws_iam_instance_profile.s3_ec2_profile: Creation complete after 1s [id=s3_ec2_profile]
+aws_instance.web[0]: Modifying... [id=i-0e879f73465cdbe08]
+aws_instance.web[1]: Modifying... [id=i-08f01fb66cbea9c24]
+aws_instance.web[1]: Still modifying... [id=i-08f01fb66cbea9c24, 10s elapsed]
+aws_instance.web[0]: Still modifying... [id=i-0e879f73465cdbe08, 10s elapsed]
+aws_instance.web[1]: Still modifying... [id=i-08f01fb66cbea9c24, 20s elapsed]
+aws_instance.web[0]: Still modifying... [id=i-0e879f73465cdbe08, 20s elapsed]
+aws_instance.web[1]: Modifications complete after 21s [id=i-08f01fb66cbea9c24]
+aws_instance.web[0]: Modifications complete after 22s [id=i-0e879f73465cdbe08]
+
+Apply complete! Resources: 1 added, 2 changed, 0 destroyed.
+````
+
+![Alt text](../images/33.png)
+
+## A.5 - Create Security Groups Attach to EC2
+We have networking configurâtes the private and public subnets, we've deployed ec2 instance into public and creates iam role for ec2 instances to access s3 bucket. Now we will create **security groups** for ec2 instances in public subnets.
+
+````sh
+........................
+aws_route_table.prt: Creating...
+aws_security_group.nat_sg: Creation complete after 3s [id=sg-03fca08b88c8175d6]
+aws_route_table_association.private_rt_association[0]: Creating...
+aws_security_group.web_sg: Creation complete after 4s [id=sg-0675174dc3fbd0d28]
+aws_route_table_association.private_rt_association[1]: Creating...
+aws_route_table_association.private_rt_association[0]: Creation complete after 1s [id=rtbassoc-0df88cb67d170f484]
+aws_route_table_association.private_rt_association[1]: Creation complete after 0s [id=rtbassoc-03a90f713ac4c0ed7]
+aws_route_table.prt: Creation complete after 1s [id=rtb-0ec92b3ebd6817d57]
+
+Apply complete! Resources: 29 added, 0 changed, 0 destroyed.
+(base) ➜  4_EC2_Instances_ELB_And_AM_Roles git:(main) ✗
+````
+
+![Alt text](../images/34.png)

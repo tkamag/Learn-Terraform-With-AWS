@@ -45,3 +45,13 @@ variable "web_tags" {
     Name = "WebServer"
   }
 }
+
+
+variable "my_app_s3_bucket" {
+  description = "Choose a name for your bucket"
+  type        = string
+  default     = "javahome-app-dev-tka"
+}
+
+
+
